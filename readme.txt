@@ -1,0 +1,60 @@
+=== Toolbar Theme Switcher ===
+Contributors: Rarst
+Tags: toolbar, themes, theme switcher, multisite
+Requires at least: 3.3.1
+Tested up to: 3.4
+Stable tag: 1.1.2
+
+Adds toolbar menu that allows users to switch theme for themselves.
+
+== Description ==
+
+Toolbar Theme Switcher description pretty much fits in its name.
+
+This plugin provides toolbar (previously known as admin bar) menu for users to quickly switch between available themes.
+
+Theme choice is individual for user, saved in cookies and doesn't affect current theme of the site.
+
+Plugin is multisite-aware - it will only list themes allowed for site and save choice for each site separately.
+
+== Installation ==
+
+1. Upload `toolbar-theme-switcher` folder to the `/wp-content/plugins/` directory
+2. Activate the plugin through the `Plugins` menu in WordPress
+
+== Frequently Asked Questions ==
+
+= I switched to broken theme!  =
+
+Clear the cookies. Don't do it again.
+
+= I don't want all themes to show... =
+
+Filter `tts_allowed_themes` and unset unwanted themes.
+
+= Who can see and use the menu? =
+
+Users with `switch_themes` capability (administrators by default).
+
+Filter `tts_capability` (capability name) or `tts_can_switch_themes` (boolean) to customize.
+
+= I don't want theme name in toolbar? | I want something else in toolbar? =
+
+Filter `tts_root_title` to control what it says.
+
+== Changelog ==
+
+= 1.1.2 =
+* _(bugfix)_ changed order of function checks to prevent deprecated notices in admin
+
+= 1.1.1 =
+* _(bugfix)_ fixed fatal error on deprecated function in WP 3.4 #blamenacin
+* _(internal)_ switched to older `add_menu()` method for now (pre-3.3 compatibility)
+
+= 1.1 =
+* _(internal)_ code cleanup
+* _(enhancement)_ show current theme name in toolbar, props Leho Kraav
+* _(enhancement)_ added filter for root node title, props Leho Kraav
+
+= 1.0 =
+* Initial repository release.
