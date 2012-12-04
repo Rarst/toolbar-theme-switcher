@@ -34,6 +34,17 @@ Clear the cookies. Don't do it again.
 
 Filter `tts_allowed_themes` and unset unwanted themes.
 
+Example code (removes Twenty Ten theme from the list):
+
+    add_filter( 'tts_allowed_themes', 'hide_twenty_ten' );
+
+    function hide_twenty_ten( $themes ) {
+
+    	unset( $themes['Twenty Ten'] );
+
+    	return $themes;
+    }
+
 = Who can see and use the menu? =
 
 Users with `switch_themes` capability (administrators by default).
@@ -47,6 +58,7 @@ Filter `tts_root_title` to control what it says.
 == Changelog ==
 
 = 1.1.3 =
+* _(docs)_ added example code for removing theme from list to readme
 * _(bugfix)_ improved cookie name to better work on secure sites
 
 = 1.1.2 =
