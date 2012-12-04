@@ -2,8 +2,8 @@
 Contributors: Rarst
 Tags: toolbar, themes, theme switcher, multisite
 Requires at least: 3.3.1
-Tested up to: 3.4
-Stable tag: 1.1.2
+Tested up to: 3.4.2
+Stable tag: trunk
 
 Adds toolbar menu that allows users to switch theme for themselves.
 
@@ -16,6 +16,8 @@ This plugin provides toolbar (previously known as admin bar) menu for users to q
 Theme choice is individual for user, saved in cookies and doesn't affect current theme of the site.
 
 Plugin is multisite-aware - it will only list themes allowed for site and save choice for each site separately.
+
+[Development repository and issue tracker](https://bitbucket.org/Rarst/toolbar-theme-switcher/).
 
 == Installation ==
 
@@ -43,6 +45,9 @@ Filter `tts_capability` (capability name) or `tts_can_switch_themes` (boolean) t
 Filter `tts_root_title` to control what it says.
 
 == Changelog ==
+
+= 1.1.3 =
+* _(bugfix)_ improved cookie name to better work on secure sites
 
 = 1.1.2 =
 * _(bugfix)_ changed order of function checks to prevent deprecated notices in admin
