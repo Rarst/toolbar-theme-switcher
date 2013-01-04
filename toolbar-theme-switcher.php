@@ -4,7 +4,7 @@ Plugin Name: Toolbar Theme Switcher
 Plugin URI: http://wordpress.org/extend/plugins/toolbar-theme-switcher/
 Description: Adds toolbar menu that allows users to switch theme for themselves.
 Author: Andrey "Rarst" Savchenko
-Version: 1.1.3
+Version: 1.1.4
 Author URI: http://www.rarst.net/
 License: MIT
 
@@ -59,6 +59,7 @@ class Toolbar_Theme_Switcher {
 			self::load_cookie();
 
 			if ( self::$theme_name ) {
+				self::get_allowed_themes(); // cache early, filters break it with multiple theme dirs
 				add_filter( 'template', array( __CLASS__, 'template' ) );
 				add_filter( 'stylesheet', array( __CLASS__, 'stylesheet' ) );
 			}

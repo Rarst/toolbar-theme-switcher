@@ -2,7 +2,7 @@
 Contributors: Rarst
 Tags: toolbar, themes, theme switcher, multisite
 Requires at least: 3.3.1
-Tested up to: 3.4.2
+Tested up to: 3.5
 Stable tag: trunk
 
 Adds toolbar menu that allows users to switch theme for themselves.
@@ -56,6 +56,9 @@ Filter `tts_capability` (capability name) or `tts_can_switch_themes` (boolean) t
 Filter `tts_root_title` to control what it says.
 
 == Changelog ==
+
+= 1.1.4 =
+* _(bugfix)_ fixed crash in installations with multiple theme directories
 
 = 1.1.3 =
 * _(docs)_ added example code for removing theme from list to readme
