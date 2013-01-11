@@ -6,6 +6,8 @@ Description: Adds toolbar menu that allows users to switch theme for themselves.
 Author: Andrey "Rarst" Savchenko
 Version: 1.1.4
 Author URI: http://www.rarst.net/
+Text Domain: toolbar-theme-switcher
+Domain Path: /lang
 License: MIT
 
 Copyright (c) 2012 Andrey Savchenko
@@ -213,6 +215,8 @@ class Toolbar_Theme_Switcher {
 			add_action( 'admin_bar_menu', array( __CLASS__, 'admin_bar_menu' ), 90 );
 			add_action( 'wp_ajax_tts_set_theme', array( __CLASS__, 'set_theme' ) );
 		}
+
+		load_plugin_textdomain( 'toolbar-theme-switcher', false, dirname( plugin_basename( __FILE__ ) ) . '/lang' );
 	}
 
 	/**
@@ -223,8 +227,8 @@ class Toolbar_Theme_Switcher {
 	static function admin_bar_menu( $wp_admin_bar ) {
 
 		$themes  = self::get_allowed_themes();
-		$current = empty( self::$theme ) ? get_option( 'current_theme' ) : self::$theme->get( 'Name' );
-		$title   = apply_filters( 'tts_root_title', 'Theme: ' . $current );
+		$current = empty( self::$theme ) ? wp_get_theme() : self::$theme;
+		$title   = apply_filters( 'tts_root_title', sprintf( __( 'Theme: %s', 'toolbar-theme-switcher' ), $current->display( 'Name' ) ) );
 
 		$wp_admin_bar->add_menu( array(
 			'id'		=> 'toolbar_theme_switcher',
@@ -236,8 +240,8 @@ class Toolbar_Theme_Switcher {
 
 			$wp_admin_bar->add_menu( array(
 				'id'     => $theme['Stylesheet'],
-				'title'  => $theme['Name'],
-				'href'   => $current == $theme['Name'] ? null : add_query_arg( array( 'action' => 'tts_set_theme', 'theme' => urlencode( $theme->get_stylesheet() ) ), admin_url( 'admin-ajax.php' ) ),
+				'title'  => $theme->display( 'Name' ),
+				'href'   => $current == $theme ? null : add_query_arg( array( 'action' => 'tts_set_theme', 'theme' => urlencode( $theme->get_stylesheet() ) ), admin_url( 'admin-ajax.php' ) ),
 				'parent' => 'toolbar_theme_switcher',
 			) );
 		}
