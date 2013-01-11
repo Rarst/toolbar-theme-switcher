@@ -38,13 +38,6 @@ class Toolbar_Theme_Switcher {
 	static $theme = false;
 
 	/**
-	 * Gets set to non-current theme name if defined in cookie.
-	 *
-	 * @var string|boolean
-	 */
-	static $theme_name = false;
-
-	/**
 	 * Hooks that need to be set up early.
 	 */
 	static function on_load() {
@@ -61,10 +54,10 @@ class Toolbar_Theme_Switcher {
 		if ( self::can_switch_themes() ) {
 			self::load_cookie();
 
-			if ( self::$theme_name ) {
+			if ( ! empty( self::$theme ) ) {
 
-				add_filter( 'template', array( __CLASS__, 'template' ) );
-				add_filter( 'stylesheet', array( __CLASS__, 'stylesheet' ) );
+				add_filter( 'template', array( self::$theme, 'get_template' ) );
+				add_filter( 'stylesheet', array( self::$theme, 'get_stylesheet' ) );
 			}
 		}
 	}
@@ -97,8 +90,7 @@ class Toolbar_Theme_Switcher {
 				&& $theme->get( 'Name' ) != get_option( 'current_theme' )
 				&& self::is_allowed( $theme )
 			) {
-				self::$theme      = $theme;
-				self::$theme_name = $theme->get( 'Name' );
+				self::$theme = $theme;
 			}
 		}
 	}
@@ -135,6 +127,8 @@ class Toolbar_Theme_Switcher {
 	 *
 	 * @param string $template
 	 *
+	 * @deprecated
+	 *
 	 * @return string
 	 */
 	static function template( $template ) {
@@ -146,6 +140,8 @@ class Toolbar_Theme_Switcher {
 	 * Stylesheet slug filter.
 	 *
 	 * @param string $stylesheet
+	 *
+	 * @deprecated
 	 *
 	 * @return string
 	 */
@@ -160,16 +156,14 @@ class Toolbar_Theme_Switcher {
 	 * @param string $field_name
 	 * @param mixed  $default
 	 *
+	 * @deprecated
+	 *
 	 * @return mixed
 	 */
 	static function get_theme_field( $field_name, $default = false ) {
 
-		if ( ! empty( self::$theme_name ) ) {
-			$themes = self::get_allowed_themes();
-
-			if ( isset( $themes[self::$theme_name][$field_name] ) )
-				return $themes[self::$theme_name][$field_name];
-		}
+		if ( ! empty( self::$theme ) )
+			return self::$theme->get( $field_name );
 
 		return $default;
 	}
@@ -219,7 +213,7 @@ class Toolbar_Theme_Switcher {
 	static function admin_bar_menu( $wp_admin_bar ) {
 
 		$themes  = self::get_allowed_themes();
-		$current = ( ! empty( self::$theme_name ) ) ? self::$theme_name : get_option( 'current_theme' );
+		$current = empty( self::$theme ) ? get_option( 'current_theme' ) : self::$theme->get( 'Name' );
 		$title   = apply_filters( 'tts_root_title', 'Theme: ' . $current );
 
 		$wp_admin_bar->add_menu( array(
