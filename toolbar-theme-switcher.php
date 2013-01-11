@@ -151,36 +151,23 @@ class Toolbar_Theme_Switcher {
 	}
 
 	/**
-	 * Retrieves allowed themes, needs to load some admin files when on front-end.
+	 * Retrieves allowed themes.
 	 *
 	 * @return array
 	 */
 	static function get_allowed_themes() {
 
-		static $themes;
+		static $themes = array();
 
 		if ( empty( $themes ) ) {
-			require_once ABSPATH . '/wp-admin/includes/theme.php';
 
-			if ( is_multisite() )
-				require_once ABSPATH . '/wp-admin/includes/ms.php';
+			$wp_themes = wp_get_themes( array( 'allowed' => true ) );
 
-			if ( function_exists( 'wp_get_themes' ) )  {
-				$wp_themes = wp_get_themes( array( 'allowed' => true ) );
-				$themes = array();
+			/** @var WP_Theme $theme */
+			foreach ( $wp_themes as $theme ) {
 
-				/**
-				 * @var WP_Theme $theme
-				 */
-				foreach ( $wp_themes as $theme ) {
-					$themes[$theme->get( 'Name' )] = $theme;
-				}
-			}
-			elseif ( function_exists( 'get_allowed_themes' ) ) {
-				$themes = get_allowed_themes();
-			}
-			else {
-				$themes = array();
+				// make keys names (rather than slugs) for backwards compat
+				$themes[$theme->get( 'Name' )] = $theme;
 			}
 
 			$themes = apply_filters( 'tts_allowed_themes', $themes );
