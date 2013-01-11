@@ -56,8 +56,11 @@ class Toolbar_Theme_Switcher {
 
 			if ( ! empty( self::$theme ) ) {
 
-				add_filter( 'template', array( self::$theme, 'get_template' ) );
-				add_filter( 'stylesheet', array( self::$theme, 'get_stylesheet' ) );
+				add_filter( 'pre_option_template', array( self::$theme, 'get_template' ) );
+				add_filter( 'pre_option_stylesheet', array( self::$theme, 'get_stylesheet' ) );
+				add_filter( 'pre_option_stylesheet_root', array( self::$theme, 'get_theme_root' ) );
+				add_filter( 'pre_option_template_root', '__return_false' );
+				add_filter( 'pre_option_current_theme', '__return_false' );
 			}
 		}
 	}
