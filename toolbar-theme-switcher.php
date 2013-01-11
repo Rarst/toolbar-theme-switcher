@@ -34,6 +34,9 @@ Toolbar_Theme_Switcher::on_load();
  */
 class Toolbar_Theme_Switcher {
 
+	/** @var WP_Theme $theme */
+	static $theme = false;
+
 	/**
 	 * Gets set to non-current theme name if defined in cookie.
 	 *
@@ -59,7 +62,7 @@ class Toolbar_Theme_Switcher {
 			self::load_cookie();
 
 			if ( self::$theme_name ) {
-				self::get_allowed_themes(); // cache early, filters break it with multiple theme dirs
+
 				add_filter( 'template', array( __CLASS__, 'template' ) );
 				add_filter( 'stylesheet', array( __CLASS__, 'stylesheet' ) );
 			}
@@ -86,8 +89,17 @@ class Toolbar_Theme_Switcher {
 		$cookie_name = self::get_cookie_name();
 
 		if ( ! empty( $_COOKIE[$cookie_name] ) ) {
-			if ( $_COOKIE[$cookie_name] != get_option( 'current_theme' ) )
-				self::$theme_name = $_COOKIE[$cookie_name];
+
+			$theme = wp_get_theme( $_COOKIE[$cookie_name] );
+
+			if (
+				$theme->exists()
+				&& $theme->get( 'Name' ) != get_option( 'current_theme' )
+				&& self::is_allowed( $theme )
+			) {
+				self::$theme      = $theme;
+				self::$theme_name = $theme->get( 'Name' );
+			}
 		}
 	}
 
@@ -104,6 +116,18 @@ class Toolbar_Theme_Switcher {
 			$hash = 'wordpress_tts_theme_' . md5( home_url( '', 'http' ) );
 
 		return $hash;
+	}
+
+	/**
+	 * If theme by name is in list of allowed to be switched to.
+	 *
+	 * @param WP_Theme $theme
+	 *
+	 * @return bool
+	 */
+	static function is_allowed( $theme ) {
+
+		return array_key_exists( $theme->get( 'Name' ), self::get_allowed_themes() );
 	}
 
 	/**
@@ -223,10 +247,8 @@ class Toolbar_Theme_Switcher {
 		$stylesheet = $_REQUEST['theme'];
 		$theme      = wp_get_theme( $stylesheet );
 
-		if ( $theme->exists()
-				&& array_key_exists( $theme->get( 'Name' ), self::get_allowed_themes() )
-		)
-			setcookie( self::get_cookie_name(), $theme->get( 'Name' ), strtotime( '+1 year' ), COOKIEPATH );
+		if ( $theme->exists() && self::is_allowed( $theme ) )
+			setcookie( self::get_cookie_name(), $theme->get_stylesheet(), strtotime( '+1 year' ), COOKIEPATH );
 
 		wp_safe_redirect( wp_get_referer() );
 		die;
