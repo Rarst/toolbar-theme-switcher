@@ -203,11 +203,13 @@ class Toolbar_Theme_Switcher {
 			'title' => $title,
 		) );
 
+		/** @var WP_Theme $theme */
 		foreach ( $themes as $theme ) {
+
 			$wp_admin_bar->add_menu( array(
 				'id'     => $theme['Stylesheet'],
 				'title'  => $theme['Name'],
-				'href'   => $current == $theme['Name'] ? null : add_query_arg( array( 'action' => 'tts_set_theme', 'theme' => urlencode( $theme['Name'] ) ), admin_url( 'admin-ajax.php' ) ),
+				'href'   => $current == $theme['Name'] ? null : add_query_arg( array( 'action' => 'tts_set_theme', 'theme' => urlencode( $theme->get_stylesheet() ) ), admin_url( 'admin-ajax.php' ) ),
 				'parent' => 'toolbar_theme_switcher',
 			) );
 		}
@@ -218,10 +220,13 @@ class Toolbar_Theme_Switcher {
 	 */
 	static function set_theme() {
 
-		$theme_name = $_REQUEST['theme'];
+		$stylesheet = $_REQUEST['theme'];
+		$theme      = wp_get_theme( $stylesheet );
 
-		if ( array_key_exists( $theme_name, self::get_allowed_themes() ) )
-			setcookie( self::get_cookie_name(), $theme_name, strtotime( '+1 year' ), COOKIEPATH );
+		if ( $theme->exists()
+				&& array_key_exists( $theme->get( 'Name' ), self::get_allowed_themes() )
+		)
+			setcookie( self::get_cookie_name(), $theme->get( 'Name' ), strtotime( '+1 year' ), COOKIEPATH );
 
 		wp_safe_redirect( wp_get_referer() );
 		die;
