@@ -65,7 +65,7 @@ class Toolbar_Theme_Switcher {
 				if( empty( $parent ) )
 					add_filter( 'pre_option_template_root', array( self::$theme, 'get_theme_root' ) );
 				else
-					add_filter( 'pre_option_template_root', array( self::$theme->parent(), 'get_theme_root' ) );
+					add_filter( 'pre_option_template_root', array( $parent, 'get_theme_root' ) );
 
 				add_filter( 'pre_option_current_theme', '__return_false' );
 			}
