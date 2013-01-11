@@ -123,7 +123,7 @@ class Toolbar_Theme_Switcher {
 	}
 
 	/**
-	 * If theme by name is in list of allowed to be switched to.
+	 * If theme is in list of allowed to be switched to.
 	 *
 	 * @param WP_Theme $theme
 	 *
