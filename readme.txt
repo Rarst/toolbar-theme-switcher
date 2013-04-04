@@ -1,8 +1,8 @@
 === Toolbar Theme Switcher ===
 Contributors: Rarst
 Tags: toolbar, themes, theme switcher, multisite
-Requires at least: 3.3.1
-Tested up to: 3.5
+Requires at least: 3.4
+Tested up to: 3.5.1
 Stable tag: trunk
 
 Adds toolbar menu that allows users to switch theme for themselves.
@@ -56,6 +56,11 @@ Filter `tts_capability` (capability name) or `tts_can_switch_themes` (boolean) t
 Filter `tts_root_title` to control what it says.
 
 == Changelog ==
+
+= 1.2 =
+* _(internal)_ reworked to filter underlying options - more robust, should solve customizer issues and similar
+* _(localization)_ made translation-ready, added russian translation
+* _(compatibility)_ removed legacy checks, increased minimum required WordPress version to 3.4
 
 = 1.1.4 =
 * _(bugfix)_ fixed crash in installations with multiple theme directories
