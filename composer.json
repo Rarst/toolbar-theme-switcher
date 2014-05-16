@@ -1,9 +1,9 @@
 {
 	"name"        : "rarst/toolbar-theme-switcher",
-	"description" : "Adds toolbar menu that allows users to switch theme for themselves",
+	"description" : "Adds WordPress toolbar menu that allows users to switch theme for themselves",
 	"keywords"    : ["wordpress"],
 	"type"        : "wordpress-plugin",
-	"homepage"    : "https://bitbucket.org/Rarst/toolbar-theme-switcher",
+	"homepage"    : "https://github.com/Rarst/toolbar-theme-switcher",
 	"license"     : "MIT",
 	"authors"     : [
 		{
@@ -13,8 +13,7 @@
 		}
 	],
 	"support"     : {
-		"issues": "https://bitbucket.org/Rarst/toolbar-theme-switcher/issues",
-		"source": "https://bitbucket.org/Rarst/toolbar-theme-switcher/src"
+		"issues": "https://github.com/Rarst/toolbar-theme-switcher/issues"
 	},
 	"require"     : {
 		"composer/installers": "~1.0"
