@@ -61,6 +61,9 @@ Since it doesn't handle invalidation (will need to wait or flush cache when them
 
 ## Changelog ##
 
+### 1.2.1
+* _(internal)_ updated theme allowed check to use native method over enumeration, improves boot performance
+
 ### 1.2
 * _(internal)_ reworked to filter underlying options - more robust, should solve customizer issues and similar
 * _(localization)_ made translation-ready, added russian translation

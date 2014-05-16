@@ -100,7 +100,7 @@ class Toolbar_Theme_Switcher {
 			if (
 				$theme->exists()
 				&& $theme->get( 'Name' ) != get_option( 'current_theme' )
-				&& self::is_allowed( $theme )
+				&& $theme->is_allowed()
 			) {
 				self::$theme = $theme;
 			}
@@ -124,6 +124,8 @@ class Toolbar_Theme_Switcher {
 
 	/**
 	 * If theme is in list of allowed to be switched to.
+	 *
+	 * @deprecated
 	 *
 	 * @param WP_Theme $theme
 	 *
@@ -255,7 +257,7 @@ class Toolbar_Theme_Switcher {
 		$stylesheet = $_REQUEST['theme'];
 		$theme      = wp_get_theme( $stylesheet );
 
-		if ( $theme->exists() && self::is_allowed( $theme ) )
+		if ( $theme->exists() && $theme->is_allowed() )
 			setcookie( self::get_cookie_name(), $theme->get_stylesheet(), strtotime( '+1 year' ), COOKIEPATH );
 
 		wp_safe_redirect( wp_get_referer() );
