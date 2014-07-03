@@ -233,8 +233,9 @@ class Toolbar_Theme_Switcher {
 		$title   = apply_filters( 'tts_root_title', sprintf( __( 'Theme: %s', 'toolbar-theme-switcher' ), $current->display( 'Name' ) ) );
 
 		$wp_admin_bar->add_menu( array(
-			'id'		=> 'toolbar_theme_switcher',
+			'id'    => 'toolbar_theme_switcher',
 			'title' => $title,
+			'href'  => admin_url( 'themes.php' ),
 		) );
 
 		/** @var WP_Theme $theme */
