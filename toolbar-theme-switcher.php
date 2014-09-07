@@ -58,7 +58,7 @@ class Toolbar_Theme_Switcher {
 		if ( is_admin() && 'themes.php' == $pagenow ) {
 			return;
 		}
-		
+
 		if ( self::can_switch_themes() ) {
 			self::load_cookie();
 
@@ -70,10 +70,11 @@ class Toolbar_Theme_Switcher {
 
 				$parent = self::$theme->parent();
 
-				if( empty( $parent ) )
+				if ( empty( $parent ) ) {
 					add_filter( 'pre_option_template_root', array( self::$theme, 'get_theme_root' ) );
-				else
+				} else {
 					add_filter( 'pre_option_template_root', array( $parent, 'get_theme_root' ) );
+				}
 
 				add_filter( 'pre_option_current_theme', '__return_false' );
 			}
@@ -99,9 +100,9 @@ class Toolbar_Theme_Switcher {
 
 		$cookie_name = self::get_cookie_name();
 
-		if ( ! empty( $_COOKIE[$cookie_name] ) ) {
+		if ( ! empty( $_COOKIE[ $cookie_name ] ) ) {
 
-			$theme = wp_get_theme( $_COOKIE[$cookie_name] );
+			$theme = wp_get_theme( $_COOKIE[ $cookie_name ] );
 
 			if (
 				$theme->exists()
@@ -122,8 +123,9 @@ class Toolbar_Theme_Switcher {
 
 		static $hash;
 
-		if ( empty($hash) )
+		if ( empty( $hash ) ) {
 			$hash = 'wordpress_tts_theme_' . md5( home_url( '', 'http' ) );
+		}
 
 		return $hash;
 	}
@@ -182,8 +184,9 @@ class Toolbar_Theme_Switcher {
 	 */
 	static function get_theme_field( $field_name, $default = false ) {
 
-		if ( ! empty( self::$theme ) )
+		if ( ! empty( self::$theme ) ) {
 			return self::$theme->get( $field_name );
+		}
 
 		return $default;
 	}
@@ -205,7 +208,7 @@ class Toolbar_Theme_Switcher {
 			foreach ( $wp_themes as $theme ) {
 
 				// make keys names (rather than slugs) for backwards compat
-				$themes[$theme->get( 'Name' )] = $theme;
+				$themes[ $theme->get( 'Name' ) ] = $theme;
 			}
 
 			$themes = apply_filters( 'tts_allowed_themes', $themes );
@@ -264,8 +267,9 @@ class Toolbar_Theme_Switcher {
 		$stylesheet = $_REQUEST['theme'];
 		$theme      = wp_get_theme( $stylesheet );
 
-		if ( $theme->exists() && $theme->is_allowed() )
+		if ( $theme->exists() && $theme->is_allowed() ) {
 			setcookie( self::get_cookie_name(), $theme->get_stylesheet(), strtotime( '+1 year' ), COOKIEPATH );
+		}
 
 		wp_safe_redirect( wp_get_referer() );
 		die;
