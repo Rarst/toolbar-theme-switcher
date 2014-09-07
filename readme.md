@@ -1,4 +1,4 @@
-## Description ##
+## Toolbar Theme Switcher — for WordPress ##
 
 Toolbar Theme Switcher description pretty much fits in its name.
 
@@ -60,6 +60,9 @@ add_filter( 'wp_cache_themes_persistently', '__return_true' );
 Since it doesn't handle invalidation (will need to wait or flush cache when themes are added/removed), plugin isn't enabling it and leaves choice up to the user.
 
 ## Changelog ##
+
+### 1.3
+* _(enhancement)_ made plugin not interfere with Appearance admin page and real theme switching
 
 ### 1.2.1
 * _(internal)_ updated theme allowed check to use native method over enumeration, improves boot performance
