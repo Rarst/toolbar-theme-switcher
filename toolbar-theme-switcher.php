@@ -53,6 +53,12 @@ class Toolbar_Theme_Switcher {
 	 */
 	static function setup_theme() {
 
+		global $pagenow;
+
+		if ( is_admin() && 'themes.php' == $pagenow ) {
+			return;
+		}
+		
 		if ( self::can_switch_themes() ) {
 			self::load_cookie();
 
