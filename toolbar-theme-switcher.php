@@ -37,7 +37,7 @@ Toolbar_Theme_Switcher::on_load();
 class Toolbar_Theme_Switcher {
 
 	/** @var WP_Theme $theme */
-	static $theme = false;
+	public static $theme = false;
 
 	/**
 	 * Hooks that need to be set up early.
@@ -55,30 +55,22 @@ class Toolbar_Theme_Switcher {
 
 		global $pagenow;
 
-		if ( is_admin() && 'themes.php' == $pagenow ) {
+		if ( ( is_admin() && 'themes.php' == $pagenow ) || ! self::can_switch_themes() ) {
 			return;
 		}
 
-		if ( self::can_switch_themes() ) {
-			self::load_cookie();
+		self::load_cookie();
 
-			if ( ! empty( self::$theme ) ) {
-
-				add_filter( 'pre_option_template', array( self::$theme, 'get_template' ) );
-				add_filter( 'pre_option_stylesheet', array( self::$theme, 'get_stylesheet' ) );
-				add_filter( 'pre_option_stylesheet_root', array( self::$theme, 'get_theme_root' ) );
-
-				$parent = self::$theme->parent();
-
-				if ( empty( $parent ) ) {
-					add_filter( 'pre_option_template_root', array( self::$theme, 'get_theme_root' ) );
-				} else {
-					add_filter( 'pre_option_template_root', array( $parent, 'get_theme_root' ) );
-				}
-
-				add_filter( 'pre_option_current_theme', '__return_false' );
-			}
+		if ( empty( self::$theme ) ) {
+			return;
 		}
+
+		add_filter( 'pre_option_template', array( self::$theme, 'get_template' ) );
+		add_filter( 'pre_option_stylesheet', array( self::$theme, 'get_stylesheet' ) );
+		add_filter( 'pre_option_stylesheet_root', array( self::$theme, 'get_theme_root' ) );
+		$parent = self::$theme->parent();
+		add_filter( 'pre_option_template_root', array( empty( $parent ) ? self::$theme : $parent, 'get_theme_root' ) );
+		add_filter( 'pre_option_current_theme', '__return_false' );
 	}
 
 	/**
@@ -100,17 +92,18 @@ class Toolbar_Theme_Switcher {
 
 		$cookie_name = self::get_cookie_name();
 
-		if ( ! empty( $_COOKIE[ $cookie_name ] ) ) {
+		if ( empty( $_COOKIE[ $cookie_name ] ) ) {
+			return;
+		}
 
-			$theme = wp_get_theme( $_COOKIE[ $cookie_name ] );
+		$theme = wp_get_theme( $_COOKIE[ $cookie_name ] );
 
-			if (
-				$theme->exists()
-				&& $theme->get( 'Name' ) != get_option( 'current_theme' )
-				&& $theme->is_allowed()
-			) {
-				self::$theme = $theme;
-			}
+		if (
+			$theme->exists()
+			&& $theme->get( 'Name' ) != get_option( 'current_theme' )
+			&& $theme->is_allowed()
+		) {
+			self::$theme = $theme;
 		}
 	}
 
@@ -198,21 +191,22 @@ class Toolbar_Theme_Switcher {
 	 */
 	static function get_allowed_themes() {
 
-		static $themes = array();
+		static $themes;
 
-		if ( empty( $themes ) ) {
-
-			$wp_themes = wp_get_themes( array( 'allowed' => true ) );
-
-			/** @var WP_Theme $theme */
-			foreach ( $wp_themes as $theme ) {
-
-				// make keys names (rather than slugs) for backwards compat
-				$themes[ $theme->get( 'Name' ) ] = $theme;
-			}
-
-			$themes = apply_filters( 'tts_allowed_themes', $themes );
+		if ( isset( $themes  ) ) {
+			return $themes;
 		}
+
+		$wp_themes = wp_get_themes( array( 'allowed' => true ) );
+
+		/** @var WP_Theme $theme */
+		foreach ( $wp_themes as $theme ) {
+
+			// make keys names (rather than slugs) for backwards compat
+			$themes[ $theme->get( 'Name' ) ] = $theme;
+		}
+
+		$themes = apply_filters( 'tts_allowed_themes', $themes );
 
 		return $themes;
 	}
@@ -236,7 +230,6 @@ class Toolbar_Theme_Switcher {
 	 * @param WP_Admin_Bar $wp_admin_bar
 	 */
 	static function admin_bar_menu( $wp_admin_bar ) {
-
 		$themes  = self::get_allowed_themes();
 		$current = empty( self::$theme ) ? wp_get_theme() : self::$theme;
 		$title   = apply_filters( 'tts_root_title', sprintf( __( 'Theme: %s', 'toolbar-theme-switcher' ), $current->display( 'Name' ) ) );
@@ -249,7 +242,6 @@ class Toolbar_Theme_Switcher {
 
 		/** @var WP_Theme $theme */
 		foreach ( $themes as $theme ) {
-
 			$wp_admin_bar->add_menu( array(
 				'id'     => $theme['Stylesheet'],
 				'title'  => $theme->display( 'Name' ),
