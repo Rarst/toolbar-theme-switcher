@@ -59,6 +59,13 @@ class Toolbar_Theme_Switcher {
 			return;
 		}
 
+		if ( isset( $_GET['tts_reset'] ) ) {
+			setcookie( self::get_cookie_name(), '', 1 );
+			nocache_headers();
+			wp_safe_redirect( home_url() );
+			die;
+		}
+
 		self::load_cookie();
 
 		if ( empty( self::$theme ) ) {
