@@ -16,9 +16,9 @@ Toolbar Theme Switcher is a Composer package and can be installed in plugin dire
 
 ## Frequently Asked Questions ##
 
-### I switched to broken theme!
+### I switched to a broken theme!
 
-Clear the cookies. Don't do it again.
+You can reset via special URL parameter `example.com?tts_reset` or by clearing browser’s cookies for the site. 
 
 ### I don't want all themes to show...
 

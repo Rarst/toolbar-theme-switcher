@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4
+* _(enhancement)_ implemented reset link for simpler clearing of cookie
+
 ## 1.3
 * _(enhancement)_ made plugin not interfere with Appearance admin page and real theme switching
 
