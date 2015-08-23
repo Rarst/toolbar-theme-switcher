@@ -232,27 +232,74 @@ class Toolbar_Theme_Switcher {
 	}
 
 	/**
+	 * array_filter() callback for self::admin_bar_menu()
+	 *
+	 * @param string $file
+	 */
+	static function filter_template_directory( $file ) {
+		return 0 === stripos( $file, get_template_directory() ) or
+			0 === stripos( $file, get_stylesheet_directory() );
+	}
+
+	/**
+	 * array_map() callback for self::admin_bar_menu()
+	 *
+	 * @param string $file
+	 */
+	static function remove_theme_root( $file ) {
+		return substr( $file, strlen( get_theme_root() ) + 1 );
+	}
+
+	/**
 	 * Creates menu in toolbar.
 	 *
 	 * @param WP_Admin_Bar $wp_admin_bar
 	 */
 	static function admin_bar_menu( $wp_admin_bar ) {
+		global $template;
+
 		$themes  = self::get_allowed_themes();
 		$current = empty( self::$theme ) ? wp_get_theme() : self::$theme;
 		$title   = apply_filters( 'tts_root_title', sprintf( __( 'Theme: %s', 'toolbar-theme-switcher' ), $current->display( 'Name' ) ) );
+		$template_file = basename( $template );
+		$template_dir  = basename( dirname( $template ) );
 
-		$wp_admin_bar->add_menu( array(
+		$wp_admin_bar->add_node( array(
 			'id'    => 'toolbar_theme_switcher',
 			'title' => $title,
 			'href'  => admin_url( 'themes.php' ),
 		) );
 
+		$wp_admin_bar->add_node( array(
+			'id'		=> 'toolbar_theme_switcher_template',
+			'title'		=> $template_dir . '/' . $template_file,
+		) );
+
+		// only show files from current theme directory
+		$included_files = array_filter( get_included_files(), array( __CLASS__, 'filter_template_directory' ) );
+
+		// only show path partial relative to themes root directory, reduce noise
+		$included_files = array_map( array( __CLASS__, 'remove_theme_root' ), $included_files );
+
+		// ability to add more files from plugins or other points of interest
+		$included_files = apply_filters( 'tts_included_files', $included_files );
+
+		foreach ( $included_files as $file ) {
+			$wp_admin_bar->add_node( array(
+				'id'		=> $file,
+				'parent'	=> 'toolbar_theme_switcher_template',
+				'title'		=> $file,
+			) );
+		}
+
 		/** @var WP_Theme $theme */
 		foreach ( $themes as $theme ) {
-			$wp_admin_bar->add_menu( array(
+			$is_current_theme = $current->stylesheet === $theme->stylesheet;
+
+			$wp_admin_bar->add_node( array(
 				'id'     => $theme['Stylesheet'],
-				'title'  => $theme->display( 'Name' ),
-				'href'   => $current == $theme ? null : add_query_arg( array( 'action' => 'tts_set_theme', 'theme' => urlencode( $theme->get_stylesheet() ) ), admin_url( 'admin-ajax.php' ) ),
+				'title'  => ( $is_current_theme ? '&#x25b8; ' : '' ) . $theme->display( 'Name' ),
+				'href'   => $is_current_theme ? null : add_query_arg( array( 'action' => 'tts_set_theme', 'theme' => urlencode( $theme->get_stylesheet() ) ), admin_url( 'admin-ajax.php' ) ),
 				'parent' => 'toolbar_theme_switcher',
 			) );
 		}
