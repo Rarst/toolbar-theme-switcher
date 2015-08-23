@@ -241,7 +241,7 @@ class Toolbar_Theme_Switcher {
 		$current = empty( self::$theme ) ? wp_get_theme() : self::$theme;
 		$title   = apply_filters( 'tts_root_title', sprintf( __( 'Theme: %s', 'toolbar-theme-switcher' ), $current->display( 'Name' ) ) );
 
-		$wp_admin_bar->add_menu( array(
+		$wp_admin_bar->add_node( array(
 			'id'    => 'toolbar_theme_switcher',
 			'title' => $title,
 			'href'  => admin_url( 'themes.php' ),
@@ -251,7 +251,7 @@ class Toolbar_Theme_Switcher {
 		foreach ( $themes as $theme ) {
 			$is_current_theme = $current->stylesheet === $theme->stylesheet;
 
-			$wp_admin_bar->add_menu( array(
+			$wp_admin_bar->add_node( array(
 				'id'     => $theme['Stylesheet'],
 				'title'  => ( $is_current_theme ? '&#x25b8; ' : '' ) . $theme->display( 'Name' ),
 				'href'   => $is_current_theme ? null : add_query_arg( array( 'action' => 'tts_set_theme', 'theme' => urlencode( $theme->get_stylesheet() ) ), admin_url( 'admin-ajax.php' ) ),
