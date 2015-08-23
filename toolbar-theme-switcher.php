@@ -249,10 +249,12 @@ class Toolbar_Theme_Switcher {
 
 		/** @var WP_Theme $theme */
 		foreach ( $themes as $theme ) {
+			$is_current_theme = $current->stylesheet === $theme->stylesheet;
+
 			$wp_admin_bar->add_menu( array(
 				'id'     => $theme['Stylesheet'],
-				'title'  => $theme->display( 'Name' ),
-				'href'   => $current == $theme ? null : add_query_arg( array( 'action' => 'tts_set_theme', 'theme' => urlencode( $theme->get_stylesheet() ) ), admin_url( 'admin-ajax.php' ) ),
+				'title'  => ( $is_current_theme ? '&#x25b8; ' : '' ) . $theme->display( 'Name' ),
+				'href'   => $is_current_theme ? null : add_query_arg( array( 'action' => 'tts_set_theme', 'theme' => urlencode( $theme->get_stylesheet() ) ), admin_url( 'admin-ajax.php' ) ),
 				'parent' => 'toolbar_theme_switcher',
 			) );
 		}
