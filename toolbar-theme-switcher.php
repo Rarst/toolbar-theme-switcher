@@ -237,14 +237,23 @@ class Toolbar_Theme_Switcher {
 	 * @param WP_Admin_Bar $wp_admin_bar
 	 */
 	static function admin_bar_menu( $wp_admin_bar ) {
+		global $template;
+
 		$themes  = self::get_allowed_themes();
 		$current = empty( self::$theme ) ? wp_get_theme() : self::$theme;
 		$title   = apply_filters( 'tts_root_title', sprintf( __( 'Theme: %s', 'toolbar-theme-switcher' ), $current->display( 'Name' ) ) );
+		$template_file = basename( $template );
+		$template_dir  = basename( dirname( $template ) );
 
 		$wp_admin_bar->add_node( array(
 			'id'    => 'toolbar_theme_switcher',
 			'title' => $title,
 			'href'  => admin_url( 'themes.php' ),
+		) );
+
+		$wp_admin_bar->add_node( array(
+			'id'		=> 'toolbar_theme_switcher_template',
+			'title'		=> $template_dir . '/' . $template_file,
 		) );
 
 		/** @var WP_Theme $theme */
