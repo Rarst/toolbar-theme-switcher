@@ -1,8 +1,7 @@
 ## Toolbar Theme Switcher — for WordPress ##
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Rarst/toolbar-theme-switcher/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Rarst/toolbar-theme-switcher/?branch=master)
 
-Toolbar Theme Switcher description pretty much fits in its name.
-
-This plugin provides toolbar (previously known as admin bar) menu for users to quickly switch between available themes.
+Plugin provides toolbar (admin bar) menu to quickly switch between available themes.
 
 Theme choice is individual for user, saved in cookies and doesn't affect current theme of the site.
 
@@ -10,7 +9,9 @@ Plugin is multisite-aware — it will only list themes allowed for site and save
 
 ## Installation ##
 
-Toolbar Theme Switcher is a Composer package and can be installed in plugin directory via:
+Download plugin archive from [releases section](https://github.com/Rarst/toolbar-theme-switcher/releases).
+
+Or install in plugin directory via [Composer](https://getcomposer.org/):
 
     composer create-project rarst/toolbar-theme-switcher --no-dev
 

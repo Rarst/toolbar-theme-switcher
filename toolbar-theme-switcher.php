@@ -4,7 +4,7 @@ Plugin Name: Toolbar Theme Switcher
 Plugin URI: https://github.com/Rarst/toolbar-theme-switcher
 Description: Adds toolbar menu that allows users to switch theme for themselves.
 Author: Andrey "Rarst" Savchenko
-Version: 1.4
+Version: 1.5
 Author URI: http://www.rarst.net/
 Text Domain: toolbar-theme-switcher
 Domain Path: /lang
