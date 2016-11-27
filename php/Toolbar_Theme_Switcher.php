@@ -143,7 +143,7 @@ class Toolbar_Theme_Switcher {
 			add_action( 'wp_ajax_tts_set_theme', array( __CLASS__, 'set_theme' ) );
 		}
 
-		load_plugin_textdomain( 'toolbar-theme-switcher', false, dirname( plugin_basename( __FILE__ ) ) . '/lang' );
+		load_plugin_textdomain( 'toolbar-theme-switcher', false, dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/lang' );
 	}
 
 	/**
