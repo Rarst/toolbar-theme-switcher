@@ -148,6 +148,8 @@ class Toolbar_Theme_Switcher {
 		$themes  = self::get_allowed_themes();
 		$current = empty( self::$theme ) ? wp_get_theme() : self::$theme;
 		unset( $themes[ $current->get( 'Name' ) ] );
+		uksort( $themes, array( __CLASS__, 'sort_core_themes' ) );
+
 		$title = apply_filters( 'tts_root_title', sprintf( __( 'Theme: %s', 'toolbar-theme-switcher' ), $current->display( 'Name' ) ) );
 
 		$wp_admin_bar->add_menu( array(
@@ -172,6 +174,43 @@ class Toolbar_Theme_Switcher {
 				'parent' => 'toolbar_theme_switcher',
 			) );
 		}
+	}
+
+	/**
+	 * Callback to sort theme array with core themes in numerical order by year.
+	 *
+	 * @param string $theme_a First theme name.
+	 * @param string $theme_b Second theme name.
+	 *
+	 * @return int
+	 */
+	public static function sort_core_themes( $theme_a, $theme_b ) {
+
+		static $twenties = array(
+			'Twenty Ten',
+			'Twenty Eleven',
+			'Twenty Twelve',
+			'Twenty Thirteen',
+			'Twenty Fourteen',
+			'Twenty Fifteen',
+			'Twenty Sixteen',
+			'Twenty Seventeen',
+			'Twenty Eighteen',
+			'Twenty Nineteen',
+			'Twenty Twenty',
+		);
+
+		if ( 0 === strpos( $theme_a, 'Twenty' ) && 0 === strpos( $theme_b, 'Twenty' ) ) {
+
+			$index_a = array_search( $theme_a, $twenties, true );
+			$index_b = array_search( $theme_b, $twenties, true );
+
+			if ( false !== $index_a || false !== $index_b ) {
+				return ( $index_a < $index_b ) ? - 1 : 1;
+			}
+		}
+
+		return strcasecmp( $theme_a, $theme_b );
 	}
 
 	/**
