@@ -102,13 +102,13 @@ class Toolbar_Theme_Switcher {
 	/**
 	 * Retrieves allowed themes.
 	 *
-	 * @return array
+	 * @return WP_Theme[]
 	 */
 	public static function get_allowed_themes() {
 
 		static $themes;
 
-		if ( isset( $themes  ) ) {
+		if ( isset( $themes ) ) {
 			return $themes;
 		}
 
@@ -117,7 +117,7 @@ class Toolbar_Theme_Switcher {
 		/** @var WP_Theme $theme */
 		foreach ( $wp_themes as $theme ) {
 
-			// make keys names (rather than slugs) for backwards compat
+			// Make keys names (rather than slugs) for backwards compat.
 			$themes[ $theme->get( 'Name' ) ] = $theme;
 		}
 
@@ -142,12 +142,13 @@ class Toolbar_Theme_Switcher {
 	/**
 	 * Creates menu in toolbar.
 	 *
-	 * @param WP_Admin_Bar $wp_admin_bar
+	 * @param WP_Admin_Bar $wp_admin_bar Admin bar instance.
 	 */
 	public static function admin_bar_menu( $wp_admin_bar ) {
 		$themes  = self::get_allowed_themes();
 		$current = empty( self::$theme ) ? wp_get_theme() : self::$theme;
-		$title   = apply_filters( 'tts_root_title', sprintf( __( 'Theme: %s', 'toolbar-theme-switcher' ), $current->display( 'Name' ) ) );
+		unset( $themes[ $current->get( 'Name' ) ] );
+		$title = apply_filters( 'tts_root_title', sprintf( __( 'Theme: %s', 'toolbar-theme-switcher' ), $current->display( 'Name' ) ) );
 
 		$wp_admin_bar->add_menu( array(
 			'id'    => 'toolbar_theme_switcher',
@@ -155,12 +156,19 @@ class Toolbar_Theme_Switcher {
 			'href'  => admin_url( 'themes.php' ),
 		) );
 
-		/** @var WP_Theme $theme */
+		$ajax_url = admin_url( 'admin-ajax.php' );
+
 		foreach ( $themes as $theme ) {
+
+			$href = add_query_arg( array(
+				'action' => 'tts_set_theme',
+				'theme'  => urlencode( $theme->get_stylesheet() ),
+			), $ajax_url );
+
 			$wp_admin_bar->add_menu( array(
 				'id'     => $theme['Stylesheet'],
 				'title'  => $theme->display( 'Name' ),
-				'href'   => $current == $theme ? null : add_query_arg( array( 'action' => 'tts_set_theme', 'theme' => urlencode( $theme->get_stylesheet() ) ), admin_url( 'admin-ajax.php' ) ),
+				'href'   => $href,
 				'parent' => 'toolbar_theme_switcher',
 			) );
 		}
