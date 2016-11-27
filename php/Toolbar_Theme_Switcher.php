@@ -28,13 +28,7 @@ class Toolbar_Theme_Switcher {
 			return;
 		}
 
-		if ( ! empty( filter_input( INPUT_GET, 'tts_reset' ) ) ) {
-			setcookie( self::get_cookie_name(), '', 1 );
-			nocache_headers();
-			wp_safe_redirect( home_url() );
-			die;
-		}
-
+		self::check_reset();
 		self::load_cookie();
 
 		if ( empty( self::$theme ) ) {
@@ -47,6 +41,19 @@ class Toolbar_Theme_Switcher {
 		$parent = self::$theme->parent();
 		add_filter( 'pre_option_template_root', array( empty( $parent ) ? self::$theme : $parent, 'get_theme_root' ) );
 		add_filter( 'pre_option_current_theme', '__return_false' );
+	}
+
+	/**
+	 * Clear theme choice if reset variable is present in request.
+	 */
+	public static function check_reset() {
+
+		if ( ! empty( filter_input( INPUT_GET, 'tts_reset' ) ) ) {
+			setcookie( self::get_cookie_name(), '', 1 );
+			nocache_headers();
+			wp_safe_redirect( home_url() );
+			die;
+		}
 	}
 
 	/**
