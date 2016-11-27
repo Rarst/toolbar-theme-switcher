@@ -100,67 +100,6 @@ class Toolbar_Theme_Switcher {
 	}
 
 	/**
-	 * If theme is in list of allowed to be switched to.
-	 *
-	 * @deprecated
-	 *
-	 * @param WP_Theme $theme
-	 *
-	 * @return bool
-	 */
-	public static function is_allowed( $theme ) {
-
-		return array_key_exists( $theme->get( 'Name' ), self::get_allowed_themes() );
-	}
-
-	/**
-	 * Template slug filter.
-	 *
-	 * @param string $template
-	 *
-	 * @deprecated
-	 *
-	 * @return string
-	 */
-	public static function template( $template ) {
-
-		return self::get_theme_field( 'Template', $template );
-	}
-
-	/**
-	 * Stylesheet slug filter.
-	 *
-	 * @param string $stylesheet
-	 *
-	 * @deprecated
-	 *
-	 * @return string
-	 */
-	public static function stylesheet( $stylesheet ) {
-
-		return self::get_theme_field( 'Stylesheet', $stylesheet );
-	}
-
-	/**
-	 * Returns field from theme data if cookie is set to valid theme.
-	 *
-	 * @param string $field_name
-	 * @param mixed  $default
-	 *
-	 * @deprecated
-	 *
-	 * @return mixed
-	 */
-	public static function get_theme_field( $field_name, $default = false ) {
-
-		if ( ! empty( self::$theme ) ) {
-			return self::$theme->get( $field_name );
-		}
-
-		return $default;
-	}
-
-	/**
 	 * Retrieves allowed themes.
 	 *
 	 * @return array
@@ -242,4 +181,67 @@ class Toolbar_Theme_Switcher {
 		wp_safe_redirect( wp_get_referer() );
 		die;
 	}
+
+	// <editor-fold desc="Deprecated">
+	/**
+	 * If theme is in list of allowed to be switched to.
+	 *
+	 * @deprecated :2.0
+	 *
+	 * @param WP_Theme $theme
+	 *
+	 * @return bool
+	 */
+	public static function is_allowed( $theme ) {
+
+		return array_key_exists( $theme->get( 'Name' ), self::get_allowed_themes() );
+	}
+
+	/**
+	 * Template slug filter.
+	 *
+	 * @param string $template
+	 *
+	 * @deprecated :2.0
+	 *
+	 * @return string
+	 */
+	public static function template( $template ) {
+
+		return self::get_theme_field( 'Template', $template );
+	}
+
+	/**
+	 * Stylesheet slug filter.
+	 *
+	 * @param string $stylesheet
+	 *
+	 * @deprecated :2.0
+	 *
+	 * @return string
+	 */
+	public static function stylesheet( $stylesheet ) {
+
+		return self::get_theme_field( 'Stylesheet', $stylesheet );
+	}
+
+	/**
+	 * Returns field from theme data if cookie is set to valid theme.
+	 *
+	 * @param string $field_name
+	 * @param mixed  $default
+	 *
+	 * @deprecated :2.0
+	 *
+	 * @return mixed
+	 */
+	public static function get_theme_field( $field_name, $default = false ) {
+
+		if ( ! empty( self::$theme ) ) {
+			return self::$theme->get( $field_name );
+		}
+
+		return $default;
+	}
+	// </editor-fold>
 }
