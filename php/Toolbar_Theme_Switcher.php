@@ -11,7 +11,7 @@ class Toolbar_Theme_Switcher {
 	/**
 	 * Hooks that need to be set up early.
 	 */
-	static function on_load() {
+	public static function on_load() {
 
 		add_action( 'setup_theme', array( __CLASS__, 'setup_theme' ) );
 		add_action( 'init', array( __CLASS__, 'init' ) );
@@ -20,7 +20,7 @@ class Toolbar_Theme_Switcher {
 	/**
 	 * Loads cookie and sets up theme filters.
 	 */
-	static function setup_theme() {
+	public static function setup_theme() {
 
 		global $pagenow;
 
@@ -54,7 +54,7 @@ class Toolbar_Theme_Switcher {
 	 *
 	 * @return boolean
 	 */
-	static function can_switch_themes() {
+	public static function can_switch_themes() {
 
 		$capability = apply_filters( 'tts_capability', 'switch_themes' );
 
@@ -64,7 +64,7 @@ class Toolbar_Theme_Switcher {
 	/**
 	 * Sets if cookie is defined to non-default theme.
 	 */
-	static function load_cookie() {
+	public static function load_cookie() {
 
 		$cookie_name = self::get_cookie_name();
 
@@ -88,7 +88,7 @@ class Toolbar_Theme_Switcher {
 	 *
 	 * @return string
 	 */
-	static function get_cookie_name() {
+	public static function get_cookie_name() {
 
 		static $hash;
 
@@ -108,7 +108,7 @@ class Toolbar_Theme_Switcher {
 	 *
 	 * @return bool
 	 */
-	static function is_allowed( $theme ) {
+	public static function is_allowed( $theme ) {
 
 		return array_key_exists( $theme->get( 'Name' ), self::get_allowed_themes() );
 	}
@@ -122,7 +122,7 @@ class Toolbar_Theme_Switcher {
 	 *
 	 * @return string
 	 */
-	static function template( $template ) {
+	public static function template( $template ) {
 
 		return self::get_theme_field( 'Template', $template );
 	}
@@ -136,7 +136,7 @@ class Toolbar_Theme_Switcher {
 	 *
 	 * @return string
 	 */
-	static function stylesheet( $stylesheet ) {
+	public static function stylesheet( $stylesheet ) {
 
 		return self::get_theme_field( 'Stylesheet', $stylesheet );
 	}
@@ -151,7 +151,7 @@ class Toolbar_Theme_Switcher {
 	 *
 	 * @return mixed
 	 */
-	static function get_theme_field( $field_name, $default = false ) {
+	public static function get_theme_field( $field_name, $default = false ) {
 
 		if ( ! empty( self::$theme ) ) {
 			return self::$theme->get( $field_name );
@@ -165,7 +165,7 @@ class Toolbar_Theme_Switcher {
 	 *
 	 * @return array
 	 */
-	static function get_allowed_themes() {
+	public static function get_allowed_themes() {
 
 		static $themes;
 
@@ -190,7 +190,7 @@ class Toolbar_Theme_Switcher {
 	/**
 	 * Sets up hooks that doesn't need to happen early.
 	 */
-	static function init() {
+	public static function init() {
 
 		if ( self::can_switch_themes() ) {
 			add_action( 'admin_bar_menu', array( __CLASS__, 'admin_bar_menu' ), 90 );
@@ -205,7 +205,7 @@ class Toolbar_Theme_Switcher {
 	 *
 	 * @param WP_Admin_Bar $wp_admin_bar
 	 */
-	static function admin_bar_menu( $wp_admin_bar ) {
+	public static function admin_bar_menu( $wp_admin_bar ) {
 		$themes  = self::get_allowed_themes();
 		$current = empty( self::$theme ) ? wp_get_theme() : self::$theme;
 		$title   = apply_filters( 'tts_root_title', sprintf( __( 'Theme: %s', 'toolbar-theme-switcher' ), $current->display( 'Name' ) ) );
@@ -230,7 +230,7 @@ class Toolbar_Theme_Switcher {
 	/**
 	 * Saves selected theme in cookie if valid.
 	 */
-	static function set_theme() {
+	public static function set_theme() {
 
 		$stylesheet = $_REQUEST['theme'];
 		$theme      = wp_get_theme( $stylesheet );
