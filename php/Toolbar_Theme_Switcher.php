@@ -205,7 +205,7 @@ class Toolbar_Theme_Switcher {
 			$index_a = array_search( $theme_a, $twenties, true );
 			$index_b = array_search( $theme_b, $twenties, true );
 
-			if ( false !== $index_a || false !== $index_b ) {
+			if ( false !== $index_a && false !== $index_b ) {
 				return ( $index_a < $index_b ) ? - 1 : 1;
 			}
 		}
