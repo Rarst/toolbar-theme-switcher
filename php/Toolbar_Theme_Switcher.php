@@ -28,7 +28,7 @@ class Toolbar_Theme_Switcher {
 			return;
 		}
 
-		if ( isset( $_GET['tts_reset'] ) ) {
+		if ( ! empty( filter_input( INPUT_GET, 'tts_reset' ) ) ) {
 			setcookie( self::get_cookie_name(), '', 1 );
 			nocache_headers();
 			wp_safe_redirect( home_url() );
@@ -66,17 +66,17 @@ class Toolbar_Theme_Switcher {
 	 */
 	public static function load_cookie() {
 
-		$cookie_name = self::get_cookie_name();
+		$theme_name  = filter_input( INPUT_COOKIE, self::get_cookie_name() );
 
-		if ( empty( $_COOKIE[ $cookie_name ] ) ) {
+		if ( ! $theme_name ) {
 			return;
 		}
 
-		$theme = wp_get_theme( $_COOKIE[ $cookie_name ] );
+		$theme = wp_get_theme( $theme_name );
 
 		if (
 			$theme->exists()
-			&& $theme->get( 'Name' ) != get_option( 'current_theme' )
+			&& $theme->get( 'Name' ) !== get_option( 'current_theme' )
 			&& $theme->is_allowed()
 		) {
 			self::$theme = $theme;
@@ -218,7 +218,7 @@ class Toolbar_Theme_Switcher {
 	 */
 	public static function set_theme() {
 
-		$stylesheet = $_REQUEST['theme'];
+		$stylesheet = filter_input( INPUT_GET, 'theme' );
 		$theme      = wp_get_theme( $stylesheet );
 
 		if ( $theme->exists() && $theme->is_allowed() ) {
